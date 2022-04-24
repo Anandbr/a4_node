@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @file Declares Enumeration for user account type.
+ *
+ */
+var AccountType;
+(function (AccountType) {
+    AccountType["Personal"] = "PERSONAL";
+    AccountType["Academic"] = "ACADEMIC";
+    AccountType["Professional"] = "PROFESSIONAL";
+})(AccountType || (AccountType = {}));
+exports.default = AccountType;
