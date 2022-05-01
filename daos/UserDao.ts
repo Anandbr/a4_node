@@ -59,6 +59,8 @@ export default class UserDao implements UserDaoI {
     public deleteUser = async (uid: string): Promise<any> =>
         UserModel.deleteOne({_id: uid});
 
+
+
     /**
      * Updates user with new values in database
      * @param {string} uid Primary key of user to be modified
@@ -70,5 +72,11 @@ export default class UserDao implements UserDaoI {
             {_id: uid},
             {$set: user});
 
+    // just for test, delete user by username
+    public deleteUserByUsername = async (username: string): Promise<any> =>
+        UserModel.deleteMany({username: username});
 
+    // login
+    findUserByCredentials = async (username: string, password: string): Promise<any> =>
+        UserModel.findOne({username: username, password: password});
 }

@@ -39,11 +39,17 @@ export default class UserController implements UserControllerI {
             app.post("/users", UserController.userController.createUser);
             app.put("/users/:uid", UserController.userController.updateUser);
             app.delete("/users/:uid", UserController.userController.deleteUser);
+
+            app.post("/api/login", UserController.userController.login);
+            //for testing, not RESTful
+            app.delete("/users/username/:username/delete", UserController.userController.deleteUserByUsername)
         }
         return UserController.userController;
     }
 
-    private constructor() {}
+
+    private constructor() {
+    }
 
     /**
      * Retrieves all users from the database and returns an array of users.
@@ -99,4 +105,16 @@ export default class UserController implements UserControllerI {
     deleteUser = (req: Request, res: Response) =>
         this.userDao.deleteUser(req.params.uid)
             .then(status => res.json(status));
+
+    //login
+    login = (req: Request, res: Response) =>
+        this.userDao.findUserByCredentials(req.body.username, req.body.password)
+            .then(user => {
+                res.json(user)
+            });
+
+    // just for test, delete user by username
+    deleteUserByUsername = (req: Request, res: Response) =>
+        this.userDao.deleteUserByUsername(req.params.username)
+            .then(status => res.send(status));
 }

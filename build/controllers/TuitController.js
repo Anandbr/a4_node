@@ -73,6 +73,9 @@ class TuitController {
          */
         this.deleteTuit = (req, res) => this.tuitDao.deleteTuit(req.params.tid)
             .then(status => res.json(status));
+        // just for test, delete tuit by content
+        this.deleteTuitByContent = (req, res) => this.tuitDao.deleteTuitByContent(req.params.content)
+            .then(status => res.json(status));
     }
 }
 exports.default = TuitController;
@@ -92,6 +95,8 @@ TuitController.getInstance = (app) => {
         app.post("/users/:uid/tuits", TuitController.tuitController.createTuitByUser);
         app.put("/tuits/:tid", TuitController.tuitController.updateTuit);
         app.delete("/tuits/:tid", TuitController.tuitController.deleteTuit);
+        //for testing, not RESTful
+        app.delete("/tuits/content/:content/delete", TuitController.tuitController.deleteTuitByContent);
     }
     return TuitController.tuitController;
 };

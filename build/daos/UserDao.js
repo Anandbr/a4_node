@@ -52,6 +52,10 @@ class UserDao {
         this.updateUser = (uid, user) => __awaiter(this, void 0, void 0, function* () {
             return UserModel_1.default.updateOne({ _id: uid }, { $set: user });
         });
+        // just for test, delete user by username
+        this.deleteUserByUsername = (username) => __awaiter(this, void 0, void 0, function* () { return UserModel_1.default.deleteMany({ username: username }); });
+        // login
+        this.findUserByCredentials = (username, password) => __awaiter(this, void 0, void 0, function* () { return UserModel_1.default.findOne({ username: username, password: password }); });
     }
 }
 exports.default = UserDao;

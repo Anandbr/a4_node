@@ -65,6 +65,14 @@ class UserController {
          */
         this.deleteUser = (req, res) => this.userDao.deleteUser(req.params.uid)
             .then(status => res.json(status));
+        //login
+        this.login = (req, res) => this.userDao.findUserByCredentials(req.body.username, req.body.password)
+            .then(user => {
+            res.json(user);
+        });
+        // just for test, delete user by username
+        this.deleteUserByUsername = (req, res) => this.userDao.deleteUserByUsername(req.params.username)
+            .then(status => res.send(status));
     }
 }
 exports.default = UserController;
@@ -84,6 +92,9 @@ UserController.getInstance = (app) => {
         app.post("/users", UserController.userController.createUser);
         app.put("/users/:uid", UserController.userController.updateUser);
         app.delete("/users/:uid", UserController.userController.deleteUser);
+        app.post("/api/login", UserController.userController.login);
+        //for testing, not RESTful
+        app.delete("/users/username/:username/delete", UserController.userController.deleteUserByUsername);
     }
     return UserController.userController;
 };

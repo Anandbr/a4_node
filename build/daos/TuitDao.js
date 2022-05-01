@@ -24,7 +24,11 @@ class TuitDao {
          * Retrieve all tuit documents from tuits collection
          * @returns {Promise} To be notified when the tuits are retrieved from database
          */
-        this.findAllTuits = () => __awaiter(this, void 0, void 0, function* () { return TuitModel_1.default.find().exec(); });
+        this.findAllTuits = () => __awaiter(this, void 0, void 0, function* () {
+            return TuitModel_1.default.find()
+                .populate("postedBy")
+                .exec();
+        });
         //Populated paths are no longer set to their original _id ,
         //their value is replaced with the mongoose document returned from the database
         //by performing a separate query before returning the results.
@@ -47,6 +51,7 @@ class TuitDao {
         this.findTuitsByUser = (uid) => __awaiter(this, void 0, void 0, function* () {
             return TuitModel_1.default
                 .find({ postedBy: uid })
+                .populate("postedBy")
                 .exec();
         });
         /**
@@ -74,6 +79,8 @@ class TuitDao {
         this.updateTuit = (tid, tuit) => __awaiter(this, void 0, void 0, function* () {
             return TuitModel_1.default.updateOne({ _id: tid }, { $set: tuit });
         });
+        // just for test, delete tuit by content
+        this.deleteTuitByContent = (tuit) => __awaiter(this, void 0, void 0, function* () { return TuitModel_1.default.deleteMany({ tuit: tuit }); });
     }
 }
 exports.default = TuitDao;
