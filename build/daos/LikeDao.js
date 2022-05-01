@@ -39,7 +39,13 @@ class LikeDao {
         this.findAllTuitsLikedByUser = (uid) => __awaiter(this, void 0, void 0, function* () {
             return LikeModel_1.default
                 .find({ likedBy: uid })
-                .populate("tuit")
+                .lean()
+                .populate({
+                path: "tuit",
+                populate: {
+                    path: "postedBy"
+                }
+            })
                 .exec();
         });
         /**
@@ -56,6 +62,19 @@ class LikeDao {
          * @returns {Promise} To be notified when like is removed from the database
          */
         this.userUnlikesTuit = (uid, tid) => __awaiter(this, void 0, void 0, function* () { return LikeModel_1.default.deleteOne({ tuit: tid, likedBy: uid }); });
+        /**
+         * Counts the total likes a particular tuit has
+         * @param {string} tid Tuit's primary key
+         * @returns {Promise} To be notified when total count is calculated
+         */
+        this.countHowManyLikedTuit = (tid) => __awaiter(this, void 0, void 0, function* () { return LikeModel_1.default.count({ tuit: tid }); });
+        /**
+         * Find out if a user has liked a particular tuit
+         * @param {string} uid User's primary key
+         * @param {string} tid Tuit's primary key
+         * @returns {Promise} To be notified when data is retrived from the database
+         */
+        this.findUserLikesTuit = (uid, tid) => __awaiter(this, void 0, void 0, function* () { return LikeModel_1.default.findOne({ tuit: tid, likedBy: uid }); });
     }
 }
 exports.default = LikeDao;

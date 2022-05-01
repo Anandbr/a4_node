@@ -26,6 +26,7 @@ class TuitDao {
          */
         this.findAllTuits = () => __awaiter(this, void 0, void 0, function* () {
             return TuitModel_1.default.find()
+                .lean()
                 .populate("postedBy")
                 .exec();
         });
@@ -51,6 +52,7 @@ class TuitDao {
         this.findTuitsByUser = (uid) => __awaiter(this, void 0, void 0, function* () {
             return TuitModel_1.default
                 .find({ postedBy: uid })
+                .lean() //use lean() tells Mongoose to skip instantiating a full Mongoose document and just give you the POJO
                 .populate("postedBy")
                 .exec();
         });
@@ -78,6 +80,15 @@ class TuitDao {
          */
         this.updateTuit = (tid, tuit) => __awaiter(this, void 0, void 0, function* () {
             return TuitModel_1.default.updateOne({ _id: tid }, { $set: tuit });
+        });
+        /**
+         * Updates the stats nested schema for a particular tuit
+         * @param {string} tid Primary key of tuit to be modified
+         * @param {any} newStats Nested schema representing tuits stats
+         * @returns {Promise} To be notified when tuit is updated in the database
+         */
+        this.updateLikes = (tid, newStats) => __awaiter(this, void 0, void 0, function* () {
+            return TuitModel_1.default.updateOne({ _id: tid }, { $set: { stats: newStats } });
         });
         // just for test, delete tuit by content
         this.deleteTuitByContent = (tuit) => __awaiter(this, void 0, void 0, function* () { return TuitModel_1.default.deleteMany({ tuit: tuit }); });
